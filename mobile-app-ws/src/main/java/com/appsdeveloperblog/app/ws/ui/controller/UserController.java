@@ -11,6 +11,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.appsdeveloperblog.app.ws.exception.ExceptionMessages;
+import com.appsdeveloperblog.app.ws.exception.RestApiException;
+import com.appsdeveloperblog.app.ws.exception.Utils;
 import com.appsdeveloperblog.app.ws.service.UserService;
 import com.appsdeveloperblog.app.ws.shared.dto.UserDto;
 import com.appsdeveloperblog.app.ws.ui.model.request.UserDetailsRequestModel;
@@ -33,8 +36,13 @@ public class UserController {
     }
 
     @PostMapping
-    public UserRest createUser(@RequestBody UserDetailsRequestModel userDetails) {
+    public UserRest createUser(@RequestBody UserDetailsRequestModel userDetails) throws RestApiException {
 	UserRest returnValue = new UserRest();
+
+	if (Utils.isNullOrBlank(userDetails.getFirstName())) {
+	    throw new RestApiException(ExceptionMessages.MISSING_REQUIRED_FIELD.getErrorMessage());
+	}
+
 	UserDto userDto = new UserDto();
 	BeanUtils.copyProperties(userDetails, userDto);
 
