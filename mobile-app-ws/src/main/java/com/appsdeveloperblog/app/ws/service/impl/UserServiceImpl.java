@@ -10,6 +10,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.appsdeveloperblog.app.ws.exception.ExceptionMessages;
+import com.appsdeveloperblog.app.ws.exception.RestApiException;
 import com.appsdeveloperblog.app.ws.io.entity.UserEntity;
 import com.appsdeveloperblog.app.ws.io.repository.UserRepository;
 import com.appsdeveloperblog.app.ws.service.UserService;
@@ -56,10 +58,10 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDto getUser(String email) {
+    public UserDto getUser(String email) throws RestApiException {
 	UserEntity userEntity = userRepository.findByEmail(email);
 	if (userEntity == null) {
-	    throw new UsernameNotFoundException(email);
+	    throw new RestApiException(ExceptionMessages.NO_RECORD_FOUND.getErrorMessage());
 	}
 
 	UserDto returnValue = new UserDto();
@@ -69,16 +71,43 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDto getUserById(String id) {
+    public UserDto getUserById(String id) throws RestApiException {
 	UserEntity userEntity = userRepository.findByUserId(id);
 	if (userEntity == null) {
-	    throw new UsernameNotFoundException(id);
+	    throw new RestApiException(ExceptionMessages.NO_RECORD_FOUND.getErrorMessage());
 	}
 
 	UserDto returnValue = new UserDto();
 	BeanUtils.copyProperties(userEntity, returnValue);
 
 	return returnValue;
+    }
+
+    @Override
+    public UserDto updateUser(String id, UserDto user) throws RestApiException {
+	UserDto returnValue = new UserDto();
+	UserEntity userEntity = userRepository.findByUserId(id);
+	if (userEntity == null) {
+	    throw new RestApiException(ExceptionMessages.NO_RECORD_FOUND.getErrorMessage());
+	}
+
+	userEntity.setFirstName(user.getFirstName());
+	userEntity.setLastName(user.getLastName());
+
+	UserEntity updatedUserEntity = userRepository.save(userEntity);
+	BeanUtils.copyProperties(updatedUserEntity, returnValue);
+
+	return returnValue;
+    }
+
+    @Override
+    public void deleteUser(String id) throws RestApiException {
+	UserEntity userEntity = userRepository.findByUserId(id);
+	if (userEntity == null) {
+	    throw new RestApiException(ExceptionMessages.NO_RECORD_FOUND.getErrorMessage());
+	}
+
+	userRepository.delete(userEntity);
     }
 
 }

@@ -18,6 +18,9 @@ import com.appsdeveloperblog.app.ws.service.UserService;
 import com.appsdeveloperblog.app.ws.shared.dto.UserDto;
 import com.appsdeveloperblog.app.ws.ui.model.request.UserDetailsRequestModel;
 import com.appsdeveloperblog.app.ws.ui.model.response.UserRest;
+import com.appsdeveloperblog.app.ws.ui.model.response.operations.OperationName;
+import com.appsdeveloperblog.app.ws.ui.model.response.operations.OperationResult;
+import com.appsdeveloperblog.app.ws.ui.model.response.operations.OperationStatusRest;
 
 @RestController
 @RequestMapping("users")
@@ -27,7 +30,7 @@ public class UserController {
     private UserService userService;
 
     @GetMapping(path = "/{id}")
-    public UserRest getUser(@PathVariable String id) {
+    public UserRest getUser(@PathVariable String id) throws RestApiException {
 	UserRest returnValue = new UserRest();
 	UserDto userDto = userService.getUserById(id);
 	BeanUtils.copyProperties(userDto, returnValue);
@@ -39,6 +42,7 @@ public class UserController {
     public UserRest createUser(@RequestBody UserDetailsRequestModel userDetails) throws RestApiException {
 	UserRest returnValue = new UserRest();
 
+	// Added to test Exception handling
 	if (Utils.isNullOrBlank(userDetails.getFirstName())) {
 	    throw new RestApiException(ExceptionMessages.MISSING_REQUIRED_FIELD.getErrorMessage());
 	}
@@ -52,13 +56,28 @@ public class UserController {
 	return returnValue;
     }
 
-    @PutMapping
-    public String updateUser() {
-	return "updateUser was called!";
+    @PutMapping(path = "/{id}")
+    public UserRest updateUser(@PathVariable String id, @RequestBody UserDetailsRequestModel userDetails)
+	    throws RestApiException {
+	UserRest returnValue = new UserRest();
+	UserDto userDto = new UserDto();
+	BeanUtils.copyProperties(userDetails, userDto);
+
+	UserDto updatedUser = userService.updateUser(id, userDto);
+	BeanUtils.copyProperties(updatedUser, returnValue);
+
+	return returnValue;
     }
 
-    @DeleteMapping
-    public String deleteUser() {
-	return "deleteUser was called!";
+    @DeleteMapping(path = "/{id}")
+    public OperationStatusRest deleteUser(@PathVariable String id) throws RestApiException {
+	OperationStatusRest returnValue = new OperationStatusRest();
+
+	userService.deleteUser(id);
+
+	returnValue.setOperationName(OperationName.DELETE.name());
+	returnValue.setOperationResult(OperationResult.SUCCESS.name());
+
+	return returnValue;
     }
 }
