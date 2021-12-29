@@ -13,9 +13,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.appsdeveloperblog.app.ws.exception.ExceptionMessages;
 import com.appsdeveloperblog.app.ws.exception.RestApiException;
-import com.appsdeveloperblog.app.ws.exception.Utils;
 import com.appsdeveloperblog.app.ws.service.UserService;
 import com.appsdeveloperblog.app.ws.shared.dto.UserDto;
+import com.appsdeveloperblog.app.ws.shared.utils.Utils;
 import com.appsdeveloperblog.app.ws.ui.model.request.UserDetailsRequestModel;
 import com.appsdeveloperblog.app.ws.ui.model.response.UserRest;
 import com.appsdeveloperblog.app.ws.ui.model.response.operations.OperationName;
