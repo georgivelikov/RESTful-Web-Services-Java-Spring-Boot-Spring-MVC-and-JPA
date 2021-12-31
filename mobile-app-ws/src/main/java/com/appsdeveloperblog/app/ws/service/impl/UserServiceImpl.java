@@ -58,7 +58,7 @@ public class UserServiceImpl implements UserService {
 	try {
 	    storedUserEntity = userRepository.save(userEntity);
 	} catch (Exception ex) {
-	    throw new RestApiException(ExceptionMessages.RECORD_ALREADY_EXISTS.getErrorMessage(), ex.getMessage());
+	    throw new RestApiException(ExceptionMessages.COULD_NOT_CREATE_RECORD.getErrorMessage(), ex.getMessage());
 	}
 
 	UserDto returnedUserDto = new UserDto();
