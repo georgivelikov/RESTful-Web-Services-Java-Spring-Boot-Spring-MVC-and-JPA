@@ -14,7 +14,8 @@ public class AppExceptionHandler {
 
     @ExceptionHandler(value = RestApiException.class)
     public ResponseEntity<Object> handleRestApiException(RestApiException ex, WebRequest request) {
-	ExceptionMessageRest exception = new ExceptionMessageRest(new Date(), ex.getMessage());
+	ExceptionMessageRest exception = new ExceptionMessageRest(new Date(), ex.getMessage(),
+		ex.getSourceExceptionMessage());
 	return new ResponseEntity<>(exception, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 

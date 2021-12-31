@@ -46,7 +46,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDto createUser(UserDto userDto) {
+    public UserDto createUser(UserDto userDto) throws RestApiException {
 	UserEntity userEntity = new UserEntity();
 	BeanUtils.copyProperties(userDto, userEntity);
 
@@ -54,7 +54,13 @@ public class UserServiceImpl implements UserService {
 	userEntity.setUserId(utils.generateUserId(30));
 	userEntity.setEncryptedPassword(bCryptpasswordEncoder.encode(userDto.getPassword()));
 
-	UserEntity storedUserEntity = userRepository.save(userEntity);
+	UserEntity storedUserEntity = null;
+	try {
+	    storedUserEntity = userRepository.save(userEntity);
+	} catch (Exception ex) {
+	    throw new RestApiException(ExceptionMessages.RECORD_ALREADY_EXISTS.getErrorMessage(), ex.getMessage());
+	}
+
 	UserDto returnedUserDto = new UserDto();
 	BeanUtils.copyProperties(storedUserEntity, returnedUserDto);
 

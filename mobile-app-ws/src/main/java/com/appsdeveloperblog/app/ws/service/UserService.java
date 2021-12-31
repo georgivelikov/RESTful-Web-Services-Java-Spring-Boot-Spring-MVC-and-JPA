@@ -9,7 +9,7 @@ import com.appsdeveloperblog.app.ws.shared.dto.UserDto;
 
 public interface UserService extends UserDetailsService {
 
-    public UserDto createUser(UserDto user);
+    public UserDto createUser(UserDto user) throws RestApiException;
 
     public UserDto getUser(String email) throws RestApiException;
 
