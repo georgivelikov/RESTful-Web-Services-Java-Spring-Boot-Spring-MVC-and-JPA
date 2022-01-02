@@ -1,9 +1,11 @@
 package com.appsdeveloperblog.app.ws.ui.controller;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.modelmapper.ModelMapper;
+import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,10 +19,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.appsdeveloperblog.app.ws.exception.ExceptionMessages;
 import com.appsdeveloperblog.app.ws.exception.RestApiException;
+import com.appsdeveloperblog.app.ws.service.AddressService;
 import com.appsdeveloperblog.app.ws.service.UserService;
+import com.appsdeveloperblog.app.ws.shared.dto.AddressDto;
 import com.appsdeveloperblog.app.ws.shared.dto.UserDto;
 import com.appsdeveloperblog.app.ws.shared.utils.Utils;
 import com.appsdeveloperblog.app.ws.ui.model.request.UserDetailsRequestModel;
+import com.appsdeveloperblog.app.ws.ui.model.response.AddressRest;
 import com.appsdeveloperblog.app.ws.ui.model.response.UserRest;
 import com.appsdeveloperblog.app.ws.ui.model.response.operations.OperationName;
 import com.appsdeveloperblog.app.ws.ui.model.response.operations.OperationResult;
@@ -33,13 +38,16 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private AddressService addressService;
+
     // using ModelMapper from www.modelmapper.org
     private ModelMapper modelMapper = new ModelMapper();
 
     // 'consumes' and 'produces' may be needed for good practice
-    @GetMapping(path = "/{id}")
-    public UserRest getUser(@PathVariable String id) throws RestApiException {
-	UserDto userDto = userService.getUserById(id);
+    @GetMapping(path = "/{userId}")
+    public UserRest getUser(@PathVariable String userId) throws RestApiException {
+	UserDto userDto = userService.getUserById(userId);
 	return modelMapper.map(userDto, UserRest.class);
     }
 
@@ -102,5 +110,31 @@ public class UserController {
 	}
 
 	return returnValue;
+    }
+
+    @GetMapping(path = "/{userId}/addresses")
+    public List<AddressRest> getUserAddresses(@PathVariable String userId) throws RestApiException {
+	List<AddressRest> returnValue = new ArrayList<>();
+
+	// Addresses can be taken using userService.findUserById(userId).getAddesses().
+	// The bellow implementation just shows how it could be done with AddessService
+	// and AddessRepository for practice
+	List<AddressDto> addressesDto = addressService.getAddresses(userId);
+	if (addressesDto != null && !addressesDto.isEmpty()) {
+	    Type listType = new TypeToken<List<AddressRest>>() {
+	    }.getType();
+
+	    returnValue = modelMapper.map(addressesDto, listType);
+	}
+
+	return returnValue;
+    }
+
+    @GetMapping(path = "/{userId}/addresses/{addressId}")
+    public AddressRest getUserAddresses(@PathVariable String userId, @PathVariable String addressId)
+	    throws RestApiException {
+	AddressDto addressDto = addressService.getAddressById(addressId);
+
+	return modelMapper.map(addressDto, AddressRest.class);
     }
 }
