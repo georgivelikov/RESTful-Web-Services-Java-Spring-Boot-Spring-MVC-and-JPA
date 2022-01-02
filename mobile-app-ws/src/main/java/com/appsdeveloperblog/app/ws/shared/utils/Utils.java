@@ -13,7 +13,7 @@ public class Utils {
     private final int ITERATIONS = 10000;
     private final int KEY_LENGTH = 256;
 
-    public String generateUserId(int length) {
+    public String generatePublicId(int length) {
 	return generateRandomString(length);
     }
 
