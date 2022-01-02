@@ -7,6 +7,8 @@ import java.util.List;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.Link;
+import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -125,16 +127,40 @@ public class UserController {
 	    }.getType();
 
 	    returnValue = modelMapper.map(addressesDto, listType);
+
+	    for (AddressRest addressRest : returnValue) {
+		Link selfLink = WebMvcLinkBuilder.linkTo(UserController.class).slash(userId).slash("addresses")
+			.slash(addressRest.getAddressId()).withSelfRel();
+		addressRest.add(selfLink);
+	    }
 	}
 
 	return returnValue;
     }
 
     @GetMapping(path = "/{userId}/addresses/{addressId}")
-    public AddressRest getUserAddresses(@PathVariable String userId, @PathVariable String addressId)
+    public AddressRest getUserAddress(@PathVariable String userId, @PathVariable String addressId)
 	    throws RestApiException {
 	AddressDto addressDto = addressService.getAddressById(addressId);
+	AddressRest returnValue = modelMapper.map(addressDto, AddressRest.class);
 
-	return modelMapper.map(addressDto, AddressRest.class);
+	// HATEOAS - adding links to the response. Could be done with
+	// EntityModel<AddressRest> as well. 'methodOn' pattern can be used
+	// -->
+	// Link building for http://localhost:port//users/{userId}
+	Link userLink = WebMvcLinkBuilder.linkTo(UserController.class).slash(userId).withRel("user");
+	returnValue.add(userLink);
+
+	// Link building for http://localhost:port//users/{userId}/addresses
+	Link userAddressesLink = WebMvcLinkBuilder.linkTo(UserController.class).slash(userId).slash("addresses")
+		.withRel("addresses");
+	returnValue.add(userAddressesLink);
+
+	// Link building for http://localhost:port//users/{userId}/addresses/{id}
+	Link selfLink = WebMvcLinkBuilder.linkTo(UserController.class).slash(userId).slash("addresses").slash(addressId)
+		.withSelfRel();
+	returnValue.add(selfLink);
+
+	return returnValue;
     }
 }
