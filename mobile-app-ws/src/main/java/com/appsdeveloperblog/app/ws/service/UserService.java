@@ -13,7 +13,7 @@ public interface UserService extends UserDetailsService {
 
     public UserDto getUser(String email) throws RestApiException;
 
-    public UserDto getUserById(String id) throws RestApiException;
+    public UserDto getUserByUserId(String id) throws RestApiException;
 
     public UserDto updateUser(String id, UserDto user) throws RestApiException;
 

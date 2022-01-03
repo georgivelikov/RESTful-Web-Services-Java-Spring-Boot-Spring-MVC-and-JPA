@@ -34,7 +34,7 @@ class UserServiceImplTest {
     private final String lastName = "Doe";
     private final String email = "anymail@test.com";
     private final String rawPassword = "abcd1234";
-    private final String publicId = "abcdefghijklmnop1234567";
+    private final String userId = "abcdefghijklmnop1234567";
     private final String encryptedPassword = "abcdefghij";
     private UserEntity userEntityStub;
     private UserDto userDtoStub;
@@ -77,7 +77,7 @@ class UserServiceImplTest {
 	userEntityStub.setId(1L);
 	userEntityStub.setFirstName(firstName);
 	userEntityStub.setLastName(lastName);
-	userEntityStub.setUserId(publicId);
+	userEntityStub.setUserId(userId);
 	userEntityStub.setEncryptedPassword(encryptedPassword);
 	userEntityStub.setEmail(email);
 
@@ -136,7 +136,7 @@ class UserServiceImplTest {
 	assertNotNull(userDto);
 	assertEquals(firstName, userDto.getFirstName());
 	assertEquals(lastName, userDto.getLastName());
-	assertEquals(publicId, userDto.getUserId());
+	assertEquals(userId, userDto.getUserId());
 	assertEquals(email, userDto.getEmail());
 	assertEquals(encryptedPassword, userDto.getEncryptedPassword());
     }
@@ -153,7 +153,7 @@ class UserServiceImplTest {
     @Test
     void testCreateUser() throws RestApiException {
 	when(userRepository.findByEmail(anyString())).thenReturn(null);
-	when(utils.generatePublicId(anyInt())).thenReturn(publicId);
+	when(utils.generatePublicId(anyInt())).thenReturn(userId);
 	when(bCryptpasswordEncoder.encode(anyString())).thenReturn(encryptedPassword);
 	when(userRepository.save(any(UserEntity.class))).thenReturn(userEntityStub);
 
@@ -162,7 +162,7 @@ class UserServiceImplTest {
 	assertNotNull(storedUserDto);
 	assertEquals(firstName, storedUserDto.getFirstName());
 	assertEquals(lastName, storedUserDto.getLastName());
-	assertEquals(publicId, storedUserDto.getUserId());
+	assertEquals(userId, storedUserDto.getUserId());
 	assertEquals(encryptedPassword, storedUserDto.getEncryptedPassword());
 	assertEquals(email, storedUserDto.getEmail());
 

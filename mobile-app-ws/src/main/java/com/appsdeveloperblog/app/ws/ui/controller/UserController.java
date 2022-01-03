@@ -49,7 +49,7 @@ public class UserController {
     // 'consumes' and 'produces' may be needed for good practice
     @GetMapping(path = "/{userId}")
     public UserRest getUser(@PathVariable String userId) throws RestApiException {
-	UserDto userDto = userService.getUserById(userId);
+	UserDto userDto = userService.getUserByUserId(userId);
 	return modelMapper.map(userDto, UserRest.class);
     }
 
