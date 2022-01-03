@@ -50,6 +50,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto createUser(UserDto userDto) throws RestApiException {
+
+	if (userRepository.findByEmail(userDto.getEmail()) != null) {
+	    throw new RestApiException(ExceptionMessages.COULD_NOT_CREATE_RECORD.getErrorMessage(),
+		    ExceptionMessages.RECORD_ALREADY_EXISTS.getErrorMessage());
+	}
+
 	for (int i = 0; i < userDto.getAddresses().size(); i++) {
 	    AddressDto addressDto = userDto.getAddresses().get(i);
 	    addressDto.setUserDetails(userDto);

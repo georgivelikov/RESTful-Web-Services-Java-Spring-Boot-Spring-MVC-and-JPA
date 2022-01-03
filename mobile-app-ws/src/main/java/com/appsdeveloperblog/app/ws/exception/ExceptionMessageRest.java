@@ -6,7 +6,7 @@ public class ExceptionMessageRest {
 
     private Date timestamp;
     private String message;
-    private String sourceExceptionMessage;
+    private String additionalInformation;
 
     public ExceptionMessageRest() {
     }
@@ -17,10 +17,10 @@ public class ExceptionMessageRest {
 
     }
 
-    public ExceptionMessageRest(Date timestamp, String message, String sourceExceptionMessage) {
+    public ExceptionMessageRest(Date timestamp, String message, String additionalInformation) {
 	this.timestamp = timestamp;
 	this.message = message;
-	this.sourceExceptionMessage = sourceExceptionMessage;
+	this.additionalInformation = additionalInformation;
     }
 
     public Date getTimestamp() {
@@ -39,12 +39,12 @@ public class ExceptionMessageRest {
 	this.message = message;
     }
 
-    public String getSourceExceptionMessage() {
-	return sourceExceptionMessage;
+    public String getAdditionalInformation() {
+	return additionalInformation;
     }
 
-    public void setSourceExceptionMessage(String sourceExceptionMessage) {
-	this.sourceExceptionMessage = sourceExceptionMessage;
+    public void setAdditionalInformation(String additionalInformation) {
+	this.additionalInformation = additionalInformation;
     }
 
 }
