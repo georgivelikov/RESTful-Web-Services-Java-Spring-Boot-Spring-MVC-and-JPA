@@ -53,8 +53,11 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
 	String userName = ((User) auth.getPrincipal()).getUsername();
 	Date expirationDate = new Date(System.currentTimeMillis() + SecurityConstants.EXPIRATION_TIME);
-	String token = Jwts.builder().setSubject(userName).setExpiration(expirationDate)
-		.signWith(SignatureAlgorithm.HS512, SecurityConstants.getTokenSecret()).compact();
+	String token = Jwts.builder()
+		.setSubject(userName)
+		.setExpiration(expirationDate)
+		.signWith(SignatureAlgorithm.HS512, SecurityConstants.getTokenSecret())
+		.compact();
 
 	UserService userService = (UserService) SpringApplicationContext.getBean("userServiceImpl");
 	UserDto userDto;
