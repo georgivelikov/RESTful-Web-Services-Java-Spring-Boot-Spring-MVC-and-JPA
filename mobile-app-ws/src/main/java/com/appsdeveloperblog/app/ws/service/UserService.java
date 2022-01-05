@@ -20,4 +20,9 @@ public interface UserService extends UserDetailsService {
     public void deleteUser(String id) throws RestApiException;
 
     public List<UserDto> getUsers(int page, int limit) throws RestApiException;
+
+    public UserDto updateUserJpql(String id, UserDto user) throws RestApiException;
+
+    // public UserDto updateUserNative(String id, UserDto user) throws
+    // RestApiException;
 }

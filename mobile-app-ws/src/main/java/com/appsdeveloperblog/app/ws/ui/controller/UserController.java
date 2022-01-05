@@ -80,6 +80,27 @@ public class UserController {
 	return modelMapper.map(updatedUser, UserRest.class);
     }
 
+    @PutMapping(path = "/{id}/jpql")
+    public UserRest updateUserJpql(@PathVariable String id, @RequestBody UserDetailsRequestModel userDetails)
+	    throws RestApiException {
+	UserDto userDto = modelMapper.map(userDetails, UserDto.class);
+
+	UserDto updatedUser = userService.updateUserJpql(id, userDto);
+
+	return modelMapper.map(updatedUser, UserRest.class);
+    }
+
+    /*
+     * @PutMapping(path = "/{id}/native") public UserRest
+     * updateUserNative(@PathVariable String id, @RequestBody
+     * UserDetailsRequestModel userDetails) throws RestApiException { UserDto
+     * userDto = modelMapper.map(userDetails, UserDto.class);
+     * 
+     * UserDto updatedUser = userService.updateUserNative(id, userDto);
+     * 
+     * return modelMapper.map(updatedUser, UserRest.class); }
+     */
+
     @DeleteMapping(path = "/{id}")
     public OperationStatusRest deleteUser(@PathVariable String id) throws RestApiException {
 	OperationStatusRest returnValue = new OperationStatusRest();
@@ -129,8 +150,11 @@ public class UserController {
 	    returnValue = modelMapper.map(addressesDto, listType);
 
 	    for (AddressRest addressRest : returnValue) {
-		Link selfLink = WebMvcLinkBuilder.linkTo(UserController.class).slash(userId).slash("addresses")
-			.slash(addressRest.getAddressId()).withSelfRel();
+		Link selfLink = WebMvcLinkBuilder.linkTo(UserController.class)
+			.slash(userId)
+			.slash("addresses")
+			.slash(addressRest.getAddressId())
+			.withSelfRel();
 		addressRest.add(selfLink);
 	    }
 	}
@@ -152,12 +176,17 @@ public class UserController {
 	returnValue.add(userLink);
 
 	// Link building for http://localhost:port//users/{userId}/addresses
-	Link userAddressesLink = WebMvcLinkBuilder.linkTo(UserController.class).slash(userId).slash("addresses")
+	Link userAddressesLink = WebMvcLinkBuilder.linkTo(UserController.class)
+		.slash(userId)
+		.slash("addresses")
 		.withRel("addresses");
 	returnValue.add(userAddressesLink);
 
 	// Link building for http://localhost:port//users/{userId}/addresses/{id}
-	Link selfLink = WebMvcLinkBuilder.linkTo(UserController.class).slash(userId).slash("addresses").slash(addressId)
+	Link selfLink = WebMvcLinkBuilder.linkTo(UserController.class)
+		.slash(userId)
+		.slash("addresses")
+		.slash(addressId)
 		.withSelfRel();
 	returnValue.add(selfLink);
 

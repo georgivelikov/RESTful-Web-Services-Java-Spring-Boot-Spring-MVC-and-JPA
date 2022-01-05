@@ -139,4 +139,28 @@ public class UserServiceImpl implements UserService {
 	return returnValue;
     }
 
+    @Override
+    public UserDto updateUserJpql(String userId, UserDto userDto) throws RestApiException {
+	String firstName = userDto.getFirstName();
+	String lastName = userDto.getLastName();
+	int result = userRepository.updateUserJpql(userId, firstName, lastName);
+
+	// result == 0 means no rows are updated, therefore there is some problem
+	if (result == 0) {
+	    throw new RestApiException(ExceptionMessages.COULD_NOT_UPDATE_RECORD.getErrorMessage());
+	}
+
+	throw new RestApiException("test");
+	// return modelMapper.map(userRepository.findByUserId(userId), UserDto.class);
+    }
+
+    /*
+     * @Override public UserDto updateUserNative(String userId, UserDto userDto)
+     * throws RestApiException { String firstName = userDto.getFirstName(); String
+     * lastName = userDto.getLastName(); userRepository.updateUserNative(userId,
+     * firstName, lastName);
+     * 
+     * return modelMapper.map(userRepository.findByUserId(userId), UserDto.class); }
+     */
+
 }
