@@ -33,6 +33,8 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
 		.and()
 		.csrf()
 		.disable()
+		// .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
+		// .and()
 		.authorizeRequests()
 		.antMatchers(HttpMethod.POST, SecurityConstants.SIGN_UP_URL)
 		.permitAll()
