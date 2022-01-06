@@ -150,8 +150,7 @@ public class UserServiceImpl implements UserService {
 	    throw new RestApiException(ExceptionMessages.COULD_NOT_UPDATE_RECORD.getErrorMessage());
 	}
 
-	throw new RestApiException("test");
-	// return modelMapper.map(userRepository.findByUserId(userId), UserDto.class);
+	return modelMapper.map(userRepository.findByUserId(userId), UserDto.class);
     }
 
     /*
