@@ -53,6 +53,11 @@ public class UserController {
 	return modelMapper.map(userDto, UserRest.class);
     }
 
+    @GetMapping(path = "/welcome")
+    public String welcome() throws RestApiException {
+	return "Welcome!";
+    }
+
     @PostMapping
     public UserRest createUser(@RequestBody UserDetailsRequestModel userDetails) throws RestApiException {
 	UserRest returnValue = new UserRest();
