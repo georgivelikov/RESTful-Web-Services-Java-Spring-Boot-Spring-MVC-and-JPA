@@ -62,7 +62,7 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 	UserService userService = (UserService) SpringApplicationContext.getBean("userServiceImpl");
 	UserDto userDto;
 	try {
-	    userDto = userService.getUser(userName);
+	    userDto = userService.getUserForLogin(userName);
 	} catch (RestApiException e) {
 	    throw new ServletException(e);
 	}

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -88,6 +89,19 @@ public class UserServiceImpl implements UserService {
 	}
 
 	return modelMapper.map(userEntity, UserDto.class);
+    }
+
+    @Override
+    public UserDto getUserForLogin(String email) throws RestApiException {
+	UserEntity userEntity = userRepository.findByEmail(email);
+	if (userEntity == null) {
+	    throw new RestApiException(ExceptionMessages.NO_RECORD_FOUND.getErrorMessage());
+	}
+
+	UserDto userDto = new UserDto();
+	// Model Mapper is not allowed here, but BeanUtils is enough
+	BeanUtils.copyProperties(userEntity, userDto);
+	return userDto;
     }
 
     @Override
