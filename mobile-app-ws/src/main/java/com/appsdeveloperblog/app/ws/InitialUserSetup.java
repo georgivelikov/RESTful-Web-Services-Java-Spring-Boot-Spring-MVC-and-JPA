@@ -38,7 +38,8 @@ public class InitialUserSetup {
 
     private boolean adminCreated = true;
 
-    @EventListener @Transactional
+    @EventListener
+    @Transactional
     public void onApplicationEvent(ApplicationReadyEvent ev) {
 
 	AuthorityEntity readAuthority = createAuthority("READ_AUTHORITY");
