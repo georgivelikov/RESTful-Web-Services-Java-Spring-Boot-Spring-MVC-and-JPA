@@ -1,7 +1,6 @@
 package com.appsdeveloperblog.app.ws.service.impl;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import org.modelmapper.ModelMapper;
@@ -10,9 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -20,10 +16,9 @@ import org.springframework.stereotype.Service;
 
 import com.appsdeveloperblog.app.ws.exception.ExceptionMessages;
 import com.appsdeveloperblog.app.ws.exception.RestApiException;
-import com.appsdeveloperblog.app.ws.io.entity.AuthorityEntity;
-import com.appsdeveloperblog.app.ws.io.entity.RoleEntity;
 import com.appsdeveloperblog.app.ws.io.entity.UserEntity;
 import com.appsdeveloperblog.app.ws.io.repository.UserRepository;
+import com.appsdeveloperblog.app.ws.security.UserPrincipal;
 import com.appsdeveloperblog.app.ws.service.UserService;
 import com.appsdeveloperblog.app.ws.shared.dto.AddressDto;
 import com.appsdeveloperblog.app.ws.shared.dto.UserDto;
@@ -51,7 +46,7 @@ public class UserServiceImpl implements UserService {
 	    throw new UsernameNotFoundException(email);
 	}
 
-	return new User(userEntity.getEmail(), userEntity.getEncryptedPassword(), getAuthorities(userEntity));
+	return new UserPrincipal(userEntity);
     }
 
     @Override
@@ -180,25 +175,4 @@ public class UserServiceImpl implements UserService {
      * 
      * return modelMapper.map(userRepository.findByUserId(userId), UserDto.class); }
      */
-
-    private Collection<? extends GrantedAuthority> getAuthorities(UserEntity userEntity) {
-	List<GrantedAuthority> authorities = new ArrayList<>();
-	List<AuthorityEntity> authorityEntities = new ArrayList<>();
-
-	Collection<RoleEntity> roles = userEntity.getRoles();
-	if (roles == null) {
-	    return authorities;
-	}
-
-	roles.forEach((role) -> {
-	    authorities.add(new SimpleGrantedAuthority(role.getName()));
-	    authorityEntities.addAll(role.getAuthorities());
-	});
-
-	authorityEntities.forEach((authorityEntity) -> {
-	    authorities.add(new SimpleGrantedAuthority(authorityEntity.getName()));
-	});
-
-	return authorities;
-    }
 }
