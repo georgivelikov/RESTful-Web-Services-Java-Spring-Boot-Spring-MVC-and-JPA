@@ -14,7 +14,6 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
-import com.appsdeveloperblog.app.ws.exception.AccessDeniedHandlerImpl;
 import com.appsdeveloperblog.app.ws.io.repository.UserRepository;
 import com.appsdeveloperblog.app.ws.service.UserService;
 
@@ -52,6 +51,7 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
 		.addFilter(new AuthorizationFilter(authenticationManager(), userRepository))
 		.exceptionHandling()
 		.accessDeniedHandler(new AccessDeniedHandlerImpl())
+		.authenticationEntryPoint(new AuthenticationEntryPointImpl())
 		.and()
 		.sessionManagement()
 		.sessionCreationPolicy(SessionCreationPolicy.STATELESS);// No session, no cookies

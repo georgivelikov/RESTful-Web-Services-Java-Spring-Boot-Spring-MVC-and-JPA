@@ -1,6 +1,9 @@
 package com.appsdeveloperblog.app.ws.shared.utils;
 
 import java.security.SecureRandom;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Random;
 
 import org.springframework.stereotype.Component;
@@ -8,10 +11,10 @@ import org.springframework.stereotype.Component;
 @Component
 public class Utils {
 
+    public static final String DATE_FORMAT = "yyyy-MM-dd HH:mm z";
+    private static final DateFormat DATE_FORMATTER = new SimpleDateFormat(DATE_FORMAT);
+    private static final String ALPHABET = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
     private final Random RANDOM = new SecureRandom();
-    private final String ALPHABET = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
-    private final int ITERATIONS = 10000;
-    private final int KEY_LENGTH = 256;
 
     public String generatePublicId(int length) {
 	return generateRandomString(length);
@@ -26,6 +29,10 @@ public class Utils {
     // Returns true if value is null or empty string (length == 0)
     public static boolean isNullOrEmpty(String value) {
 	return value == null || value.isEmpty();
+    }
+
+    public static String getDateString(Date date) {
+	return DATE_FORMATTER.format(date);
     }
 
     private String generateRandomString(int length) {
