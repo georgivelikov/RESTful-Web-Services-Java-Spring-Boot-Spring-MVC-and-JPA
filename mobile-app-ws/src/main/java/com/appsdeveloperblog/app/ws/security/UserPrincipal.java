@@ -14,6 +14,8 @@ import com.appsdeveloperblog.app.ws.io.entity.UserEntity;
 
 public class UserPrincipal implements UserDetails {
 
+    private static final long serialVersionUID = 3819574297358073680L;
+
     private UserEntity userEntity;
 
     public UserPrincipal(UserEntity userEntity) {
