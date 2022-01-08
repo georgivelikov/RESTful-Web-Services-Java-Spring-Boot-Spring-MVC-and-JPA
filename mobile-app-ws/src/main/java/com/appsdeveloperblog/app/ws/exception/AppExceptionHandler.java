@@ -1,5 +1,7 @@
 package com.appsdeveloperblog.app.ws.exception;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import org.springframework.http.HttpHeaders;
@@ -15,14 +17,18 @@ public class AppExceptionHandler {
 
     @ExceptionHandler(value = RestApiException.class)
     public ResponseEntity<Object> handleRestApiException(RestApiException ex, WebRequest request) {
-	ExceptionMessageRest exception = new ExceptionMessageRest(new Date(), getPath(request), getMethod(request),
+	DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm z");
+	String dateStr = df.format(new Date());
+	ExceptionMessageRest exception = new ExceptionMessageRest(dateStr, getPath(request), getMethod(request),
 		ex.getMessage(), ex.getSourceExceptionMessage());
 	return new ResponseEntity<>(exception, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @ExceptionHandler(value = Exception.class)
     public ResponseEntity<Object> handleException(Exception ex, WebRequest request) {
-	ExceptionMessageRest exception = new ExceptionMessageRest(new Date(), getPath(request), getMethod(request),
+	DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm a z");
+	String dateStr = df.format(new Date());
+	ExceptionMessageRest exception = new ExceptionMessageRest(dateStr, getPath(request), getMethod(request),
 		ex.getMessage());
 	return new ResponseEntity<>(exception, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
     }

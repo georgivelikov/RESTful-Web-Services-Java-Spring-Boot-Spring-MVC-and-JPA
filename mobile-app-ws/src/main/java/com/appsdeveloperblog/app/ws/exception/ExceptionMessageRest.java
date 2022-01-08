@@ -1,10 +1,8 @@
 package com.appsdeveloperblog.app.ws.exception;
 
-import java.util.Date;
-
 public class ExceptionMessageRest {
 
-    private Date timestamp;
+    private String timestamp;
     private String message;
     private String additionalInformation;
     private String path;
@@ -13,7 +11,7 @@ public class ExceptionMessageRest {
     public ExceptionMessageRest() {
     }
 
-    public ExceptionMessageRest(Date timestamp, String path, String method, String message) {
+    public ExceptionMessageRest(String timestamp, String path, String method, String message) {
 	this.timestamp = timestamp;
 	this.path = path;
 	this.setMethod(method);
@@ -21,17 +19,17 @@ public class ExceptionMessageRest {
 
     }
 
-    public ExceptionMessageRest(Date timestamp, String path, String method, String message,
+    public ExceptionMessageRest(String timestamp, String path, String method, String message,
 	    String additionalInformation) {
 	this(timestamp, path, method, message);
 	this.additionalInformation = additionalInformation;
     }
 
-    public Date getTimestamp() {
+    public String getTimestamp() {
 	return timestamp;
     }
 
-    public void setTimestamp(Date timestamp) {
+    public void setTimestamp(String timestamp) {
 	this.timestamp = timestamp;
     }
 
