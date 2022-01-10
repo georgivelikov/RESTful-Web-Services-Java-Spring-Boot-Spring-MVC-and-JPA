@@ -9,6 +9,7 @@ import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
+import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -106,6 +107,8 @@ public class UserController {
      * return modelMapper.map(updatedUser, UserRest.class); }
      */
 
+    @PostAuthorize("hasRole('ADMIN')")
+    // @Secured("ROLE_ADMIN")
     @DeleteMapping(path = "/{id}")
     public OperationStatusRest deleteUser(@PathVariable String id) throws RestApiException {
 	OperationStatusRest returnValue = new OperationStatusRest();
