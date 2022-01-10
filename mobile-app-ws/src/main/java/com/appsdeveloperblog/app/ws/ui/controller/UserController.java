@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.security.access.prepost.PostAuthorize;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -57,6 +58,12 @@ public class UserController {
     @GetMapping(path = "/welcome")
     public String welcome() throws RestApiException {
 	return "Welcome!";
+    }
+
+    @PreAuthorize("hasAuthority('DELETE_AUTHORITY')")
+    @GetMapping(path = "/protected")
+    public String protectedResource() throws RestApiException {
+	return "Welcome to protected resourse!";
     }
 
     @PostMapping
