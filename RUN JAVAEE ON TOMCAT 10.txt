@@ -1,0 +1,3 @@
+Solution: create a new directory called webapps-javaee under your Tomcat HOME and put your war file there. Then start/restart tomcat
+
+Your tomcat home directory also known as $CATALINA_BASE is the parent directory of bin and webapps directories.
